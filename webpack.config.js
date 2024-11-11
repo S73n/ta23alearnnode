@@ -25,10 +25,24 @@ export default {
   module: {
     rules: [
       {
-        test: /\.css$/i, // Regex to match .css files
-        use: ['style-loader', 'css-loader'], // Loaders to apply
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
       },
-      // other loaders can go here
+      {
+        test: /\.scss$/i,
+        use: [
+          'style-loader', 
+          "css-loader", 
+          {
+            loader: 'sass-loader',
+            options: {
+              sassOptions: {
+                quietDeps: true
+              }
+            }
+          }
+        ],
+      },
     ],
   },
 };
