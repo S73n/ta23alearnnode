@@ -5,6 +5,20 @@ export default async () => {
   let response = await fetch("https://rickandmortyapi.com/api/character");
   let json = await response.json();
   let characters = json.results;
+  let pages = [];
+  
+  characters.forEach(character => {
+    let page = new HtmlWebpackPlugin({
+      template: './src/character.njk',
+      filename: 'character_' + character.id + '.html',
+      templateParameters: {
+        character
+      },
+    });
+    
+    // Use lowercase push() to add to the array
+    pages.push(page);
+  });
 
   return {
     entry: "./src/index.js",
@@ -41,7 +55,7 @@ export default async () => {
           ],
         },
         {
-          test: /\.njk$/,
+          test: /\.njk$/i,
           use: [
             {
               loader: "simple-nunjucks-loader",
@@ -55,7 +69,7 @@ export default async () => {
       new HtmlWebpackPlugin({
         template: "./src/index.njk",
         templateParameters: {
-          name: "Relina",
+          name: "Sten",
           characters, 
         },
       }),
@@ -63,6 +77,7 @@ export default async () => {
         filename: "about.html",
         template: "./src/about.njk",
       }),
+      ...pages // Spread the generated pages
     ],
   };
 };
