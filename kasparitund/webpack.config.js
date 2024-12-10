@@ -2,22 +2,30 @@ import path from "path";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 
 export default async () => {
-  let response = await fetch("https://rickandmortyapi.com/api/character");
-  let json = await response.json();
-  let characters = json.results;
-  let pages = [];
-  
-  characters.forEach(character => {
-    let page = new HtmlWebpackPlugin({
+  const fetchCharacters = async (limit) => {
+    let characters = [];
+    let url = "https://rickandmortyapi.com/api/character";
+    
+    while (url && characters.length < limit) {
+      let response = await fetch(url);
+      let json = await response.json();
+      characters = characters.concat(json.results);
+      url = json.info.next;
+    }
+    
+    return characters.slice(0, limit);
+  };
+
+  const characters = await fetchCharacters(43);
+
+  let pages = characters.map((character) => {
+    return new HtmlWebpackPlugin({
       template: './src/character.njk',
-      filename: 'character_' + character.id + '.html',
+      filename: `character_${character.id}.html`,
       templateParameters: {
-        character
+        character,
       },
     });
-    
-    // Use lowercase push() to add to the array
-    pages.push(page);
   });
 
   return {
@@ -70,14 +78,14 @@ export default async () => {
         template: "./src/index.njk",
         templateParameters: {
           name: "Sten",
-          characters, 
+          characters,
         },
       }),
       new HtmlWebpackPlugin({
         filename: "about.html",
         template: "./src/about.njk",
       }),
-      ...pages // Spread the generated pages
+      ...pages,
     ],
   };
 };
