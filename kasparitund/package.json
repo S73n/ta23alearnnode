@@ -8,7 +8,7 @@
     "dev": "webpack serve --mode=development",
     "build": "npx webpack --mode=production",
     "start": "npm run dev",
-    "deploy": "npm run build && surge ./dist steniscool.surge.sh && start https://steniscool.surge.sh/character_10.html"
+    "deploy": "npm run build && surge ./dist steniscool.surge.sh && start https://steniscool.surge.sh"
   },
   "keywords": [],
   "author": "",
