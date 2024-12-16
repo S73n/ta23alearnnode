@@ -1,18 +1,20 @@
 import path from "path";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
 export default async () => {
   const fetchCharacters = async (limit) => {
     let characters = [];
-    let url = "https://rickandmortyapi.com/api/character";
-    
+    let url = "https://rickandmortyapi.com/api/character?page=10";
+
     while (url && characters.length < limit) {
       let response = await fetch(url);
       let json = await response.json();
       characters = characters.concat(json.results);
       url = json.info.next;
     }
-    
+
     return characters.slice(0, limit);
   };
 
@@ -32,11 +34,11 @@ export default async () => {
     entry: "./src/index.js",
     output: {
       filename: "main.js",
-      path: path.resolve(import.meta.dirname, "dist"),
+      path: path.resolve(process.cwd(), "dist"), // Muudatus siin
     },
     devServer: {
       static: {
-        directory: path.join(import.meta.dirname, "public"),
+        directory: path.join(process.cwd(), "public"), // Muudatus siin
       },
       compress: true,
       port: 9000,
