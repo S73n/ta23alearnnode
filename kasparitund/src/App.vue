@@ -1,11 +1,15 @@
 <script setup>
-    let message = 'Hello TA23A'
+import tabs from './components/tabs.vue';
+let titles = ['Item1', 'Item2', 'Item3', 'Item4'];
+ 
 </script>
-
+ 
 <template>
-    <h1>{{ message }}</h1>
-</template>
+    <Tabs :item="titles"></Tabs>
 
+</template>
+ 
 <style>
+
 
 </style>
