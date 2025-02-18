@@ -14,7 +14,7 @@ export default {
     },
     compress: true,
     port: 9000,
-    HistoryApiFallBack: true,
+    historyApiFallback: true,
   },
   module: {
     rules: [
