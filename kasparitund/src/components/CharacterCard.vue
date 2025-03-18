@@ -45,3 +45,8 @@ defineProps(['character']);
         </div>
     </div>
 </template>
+<style scoped>
+.card {
+    min-height: 100%;
+}
+</style>
