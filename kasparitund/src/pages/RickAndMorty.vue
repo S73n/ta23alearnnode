@@ -10,20 +10,29 @@ const characters = ref([]);
 const info = ref({});
 const currentPage = ref(1);
 const searchValue = ref('');
+const error = ref('');
+let searchTimeout = null;
 
 await getCharacters('https://rickandmortyapi.com/api/character');
 
 
 async function getCharacters() {
-    let response = await axios.get('https://rickandmortyapi.com/api/character', {
-        params: {
-            page: currentPage.value,
-            name: searchValue.value,
-        }
-    });
-    console.log(response.data);
-    characters.value = response.data.results;
-    info.value = response.data.info;
+    try {
+        let response = await axios.get('https://rickandmortyapi.com/api/character', {
+            params: {
+                page: currentPage.value,
+                name: searchValue.value,
+            }
+        });
+        console.log(response.data);
+        characters.value = response.data.results;
+        info.value = response.data.info;
+    } catch (err) {
+        console.log(err);
+        error.value = 'No results found';
+        characters.value = [];
+        info.value = null;
+    }
 }
 
 async function next() {
@@ -44,14 +53,19 @@ async function page(page) {
 }
 
 async function search() {
-    await getCharacters();
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(async () => {
+        error.value='';
+        currentPage.value = 1;
+        await getCharacters();
+    }, 1000);
 }
 
 </script>
 <template>
     <div class="field has-addons">
         <div class="control is-expanded">
-            <input v-model="searchValue" class="input" type="text" placeholder="Find character">
+            <input @input="search" v-model="searchValue" class="input" type="text" placeholder="Find character">
         </div>
         <div class="control">
             <button @click="search" class="button is-info">
@@ -60,10 +74,11 @@ async function search() {
         </div>
     </div>
 
-    <Pagination :info="info" :current="currentPage" @next="next" @prev="prev" @page="page"></Pagination>
+    <Pagination v-if="info" :info="info" :current="currentPage" @next="next" @prev="prev" @page="page"></Pagination>
     <div class="columns is-multiline">
         <div v-for="character in characters" class="column is-one-quartered">
             <CharacterCard :character="character"></CharacterCard>
         </div>
     </div>
+    <h1 v-if="error" class="is-size-1">{{ error }}</h1>
 </template>

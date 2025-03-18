@@ -5,7 +5,7 @@ let {info, current } = defineProps(['info', 'current']);
 
 let pageNumbers = computed(()=>{
     let pages = [];
-    for(let i = 1; i<=3; i++){
+    for(let i = 1; i<=3 && i<=info.pages; i++){
         pages[i] = i;
     }
     if(current > 2){
