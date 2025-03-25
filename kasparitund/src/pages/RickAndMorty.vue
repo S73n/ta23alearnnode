@@ -1,7 +1,7 @@
 <script setup>
 
 import axios from 'axios';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import CharacterCard from '../components/CharacterCard.vue';
 import SimplePagination from '../components/SimplePagination.vue';
 import Pagination from '../components/Pagination.vue';
@@ -12,6 +12,7 @@ const currentPage = ref(1);
 const searchValue = ref('');
 const error = ref('');
 let searchTimeout = null;
+
 
 await getCharacters('https://rickandmortyapi.com/api/character');
 
@@ -25,12 +26,11 @@ async function getCharacters() {
             }
         });
         console.log(response.data);
-        characters.value = response.data.results;
+        characters.value.push(...response.data.results);
         info.value = response.data.info;
-    } catch (err) {
+    } catch(err) {
         console.log(err);
         error.value = 'No results found';
-        characters.value = [];
         info.value = null;
     }
 }
@@ -38,13 +38,11 @@ async function getCharacters() {
 async function next() {
     currentPage.value++;
     await getCharacters();
-
 }
 
 async function prev() {
     currentPage.value--;
     await getCharacters();
-
 }
 
 async function page(page) {
@@ -52,14 +50,25 @@ async function page(page) {
     await getCharacters();
 }
 
-async function search() {
+async function search(){
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(async () => {
         error.value='';
         currentPage.value = 1;
+        characters.value = [];
         await getCharacters();
     }, 1000);
+
 }
+
+onMounted(() => {
+    document.addEventListener('scroll', () => {
+        if(window.scrollY + window.innerHeight > document.body.clientHeight - 300 ) {
+            next();
+        }
+    })
+    
+});
 
 </script>
 <template>
@@ -74,9 +83,9 @@ async function search() {
         </div>
     </div>
 
-    <Pagination v-if="info" :info="info" :current="currentPage" @next="next" @prev="prev" @page="page"></Pagination>
+   
     <div class="columns is-multiline">
-        <div v-for="character in characters" class="column is-one-quartered">
+        <div v-for="character in characters" class="column is-one-quarter">
             <CharacterCard :character="character"></CharacterCard>
         </div>
     </div>
