@@ -1,6 +1,6 @@
 import './style.scss';
 import { createApp } from 'vue';
-import { createWebHashHistory, createWebHistory, createMemoryHistory, createRouter } from 'vue-router'
+import { createWebHashHistory, createWebHistory, createMemoryHistory, createRouter } from 'vue-router';
 
 
 import App from './App.vue';
@@ -20,7 +20,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
 });
 
