@@ -5,10 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "webpack serve --mode=development",
+    "dev": "webpack --mode=development",
     "build": "webpack --mode=production",
-    "start": "npm run dev",
-    "deploy": "npm run build && surge ./dist steniscool.surge.sh"
+    "start": "webpack server --mode=development",
+    "deploy": "npm run build && surge ./dist kaspariscool.surge.sh"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +17,6 @@
     "bulma": "^1.0.2",
     "css-loader": "^7.1.2",
     "html-webpack-plugin": "^5.6.3",
-    "nunjucks-loader": "^3.0.0",
     "sass": "^1.80.6",
     "sass-loader": "^16.0.3",
     "style-loader": "^4.0.0",
@@ -31,6 +30,7 @@
   },
   "dependencies": {
     "axios": "^1.7.9",
-    "leaflet": "^1.9.4"
+    "leaflet": "^1.9.4",
+    "vue-router": "^4.5.0"
   }
 }

@@ -14,6 +14,7 @@ import WebApis from './pages/WebApis.vue';
 import Leaflet from './pages/Leaflet.vue';
 
 
+
 const routes = [
   { path: '/', component: ToDo, name: 'ToDo' },
   { path: '/modals', component: Modals, name: 'Modals' },
