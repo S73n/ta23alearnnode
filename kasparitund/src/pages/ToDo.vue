@@ -25,7 +25,6 @@ let toDoItems = computed(() => items.value.filter(item => !item.isDone));
 </script>
 
 <template>
-
     <div class="field has-addons">
         <div class="control">
             <input class="input" type="text" v-model="message" @keypress.enter="addItem">
