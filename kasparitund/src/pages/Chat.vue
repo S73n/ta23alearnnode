@@ -3,23 +3,28 @@ import axios from 'axios';
 import { ref } from 'vue';
 
 let messages = ref([]);
-let input = ref('');
+let input = ref(''); 
 
 let res = await axios.get('http://localhost:3000');
 messages.value = res.data;
 
 setInterval(async () => {
-    let res = await axios.get('http://localhost:3000');
-    messages.value = res.data;
+    let date = messages.value[messages.value.length-1]?.date ?? null;
+    let res = await axios.get('http://localhost:3000', {
+        params: {
+            date: new Date(date)
+        }
+    });
+    messages.value.push(...res.data);
 }, 1000);
 
 
-async function send() {
-    let res = await axios.post('http://localhost:3000', {
-        message: input.value
-    });
-    console.log(res);
-    input.value = '';
+async function send(){
+  let res = await axios.post('http://localhost:3000', {
+    message: input.value
+  });
+  console.log(res);
+  input.value = '';
 }
 </script>
 

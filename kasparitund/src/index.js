@@ -15,7 +15,6 @@ import Leaflet from './pages/Leaflet.vue';
 import Chat from './pages/Chat.vue';
 
 
-
 const routes = [
   { path: '/', component: ToDo, name: 'ToDo' },
   { path: '/modals', component: Modals, name: 'Modals' },

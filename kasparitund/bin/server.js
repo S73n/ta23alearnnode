@@ -7,18 +7,20 @@ let messages = [];
 app.use(express.json());
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Oigin', '*');
-  res.header('Access-Control-Allow-Headers', 'content-type');
-  next();
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'content-type');
+    next();
 });
 
 app.get('/', (req, res) => {
-  res.json(messages);
+    let date = req.query.date ?? null;
+    let filteredMessages = messages.filter(message => message.date > new Date(date));
+    res.json(filteredMessages);
 });
 
 app.post('/', (req, res) => {
-  messages.push(req.body);
-  res.json(req.body);
+    messages.push({message: req.body.message, date: new Date()});
+    res.json(req.body);
 });
 
 app.listen(port, () => {
