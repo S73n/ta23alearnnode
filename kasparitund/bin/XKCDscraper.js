@@ -2,15 +2,15 @@ import axios from "axios";
 import * as cheerio from 'cheerio';
 import fs from 'fs';
 
-function cacheGet(name) {
-    if (fs.existsSync(`./cache/${name}.html`)) {
+function cacheGet(name){
+    if(fs.existsSync(`./cache/${name}.html`)) {
         return fs.readFileSync(`./cache/${name}.html`);
     }
     return false;
 }
 
-function cacheSet(name, value) {
-    if (!fs.existsSync('./cache')) {
+function cacheSet(name, value){
+    if(!fs.existsSync('./cache')){
         fs.mkdirSync('./cache');
     }
     fs.writeFileSync(`./cache/${name}.html`, value);
@@ -20,9 +20,9 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-for (let i = 3091; i >= 3081; i--) {
+for(let i = 3091; i>=3081; i--){
     let data = cacheGet(i);
-    if (!data) {
+    if(!data) {
         console.log('LIVE REQUEST!!!!!!');
         await sleep(1000);
         let res = await axios.get(`https://xkcd.com/${i}/`);
